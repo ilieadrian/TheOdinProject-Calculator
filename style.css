@@ -23,21 +23,22 @@ body {
     text-align: center;
 }
 
-.button {
+button {
     min-width: 190px;
     font-size: 1rem;
     font-weight: 400;
     border: none;
+    outline: none;
     background-color: rgb(62, 76, 117);
     color: rgb(255, 255, 255);
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.75rem;
     border-radius: 3px;
 }
 
-.button:hover {
+button:hover {
     border: none;
     cursor: pointer;
-    background-color: rgba(62, 76, 117, 0.8);
+    opacity: 0.8;
 }
 
 /* Footer */
