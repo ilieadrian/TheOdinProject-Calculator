@@ -23,8 +23,12 @@ body {
     text-align: center;
 }
 
+.calculator {
+    width: 450px;
+}
+
 button {
-    min-width: 190px;
+    min-width: 90px;
     font-size: 1rem;
     font-weight: 400;
     border: none;
