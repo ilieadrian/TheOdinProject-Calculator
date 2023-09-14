@@ -6,6 +6,7 @@ let clickedOperator;
 let firstToDisplay;
 let secondToDisplay;
 let storingInFirstNumber = true;
+let operatorCount = 0;
 let calculationValue = document.getElementById("calculationValue");
 let currentValue = document.getElementById("currentValue");
 const numbers = document.querySelectorAll("[data-number]");
@@ -28,6 +29,11 @@ function getOperator(){
     operator = event.target.textContent;
     if (operator) {
         storingInFirstNumber = false;
+        operatorCount++;
+
+        if(secondNumber.length !== 0 && operatorCount > 1) {
+            operate(operator, firstToDisplay, secondToDisplay);
+        }
     }
 }
 
@@ -39,22 +45,24 @@ function computeNumbers() {
         secondNumber.push(clickedNumber);
         updateDisplay(secondToDisplay = secondNumber.join("").toString());
     }
-
-    console.log(firstNumber, firstToDisplay)
 }
 
 function operate(operator, a, b){
     a = parseFloat(a);
     b = parseFloat(b);
+    let result;
+
     if (operator === "/") {
-        divide(a, b);
+        result = divide(a, b);
     } else if (operator === "*") {
-        multiply(a, b);
+        result = multiply(a, b);
     } else if (operator === "-") {
-        subtract(a, b);
+        result = subtract(a, b);
     } else {
-        add(a, b);
+        result = add(a, b);
     }
+
+    return result;
 }
 
 function divide(a, b) {
@@ -74,8 +82,7 @@ function add(a, b) {
 }
 
 function updateDisplay(){
-    currentValue.innerHTML = `${firstToDisplay || 0} ${operator || ''}  ${secondToDisplay || ''}`;
-    console.log(firstNumber, firstToDisplay)
+    currentValue.innerHTML = `${firstToDisplay || 0} ${operator || ''} ${secondToDisplay || ''}`;
 }
 
 updateDisplay();
