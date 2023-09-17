@@ -6,6 +6,8 @@ let clickedOperator;
 let firstToDisplay;
 let secondToDisplay;
 let storingInFirstNumber = true;
+let result;
+let randomCheck = false;
 let operatorCount = 0;
 let calculationValue = document.getElementById("calculationValue");
 let currentValue = document.getElementById("currentValue");
@@ -30,9 +32,12 @@ function getOperator(){
     if (operator) {
         storingInFirstNumber = false;
         operatorCount++;
+        updateDisplay();
 
         if(secondNumber.length !== 0 && operatorCount > 1) {
             operate(operator, firstToDisplay, secondToDisplay);
+            randomCheck = true;
+            updateDisplay();
         }
     }
 }
@@ -50,7 +55,7 @@ function computeNumbers() {
 function operate(operator, a, b){
     a = parseFloat(a);
     b = parseFloat(b);
-    let result;
+    
 
     if (operator === "/") {
         result = divide(a, b);
@@ -61,7 +66,7 @@ function operate(operator, a, b){
     } else {
         result = add(a, b);
     }
-
+    
     return result;
 }
 
@@ -83,6 +88,11 @@ function add(a, b) {
 
 function updateDisplay(){
     currentValue.innerHTML = `${firstToDisplay || 0} ${operator || ''} ${secondToDisplay || ''}`;
+
+    if (randomCheck){
+        currentValue.innerHTML = `${result}`;
+    }
+    
 }
 
 updateDisplay();
