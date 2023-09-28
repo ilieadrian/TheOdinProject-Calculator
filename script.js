@@ -1,63 +1,36 @@
-let firstNumber = [];
-let secondNumber = [];
-let operator;
-let clickedNumber;
-let clickedOperator;
-let firstToDisplay;
-let secondToDisplay;
-let storingInFirstNumber = true;
-let result;
-let checkForSecondOperator = false;
-let operatorCount = 0;
-let calculationValue = document.getElementById("calculationValue");
-let currentValue = document.getElementById("currentValue");
-const numbers = document.querySelectorAll("[data-number]");
-const operators = document.querySelectorAll("[data-operator]");
-let clearBtn = document.querySelector(".clear");
+let firstNumber = '';
+let secondNumber = '';
+let operator = '';
+let result = '';
+let storedOperator;
+let storedSecondNumber;
+let storedFirstNumber;
+let upperDisplay = document.getElementById('upperValue');
+let bottomDisplay = document.getElementById('bottomValue')
 
-numbers.forEach((element) => {
-    element.addEventListener("click", getNumber);
-});
-
-function getNumber() {
-    clickedNumber = event.target.textContent;
-    computeNumbers()
+function updateDisplay() {
+    bottomDisplay.innerHTML = `${firstNumber || 0} ${operator || ''} ${secondNumber || ''}`;
+        
+    if(result){
+        upperDisplay.innerHTML = `${storedFirstNumber} ${storedOperator} ${storedSecondNumber}`;
+        bottomDisplay.innerHTML = `${result}`; 
+    }
 }
 
-operators.forEach((element) => {
-    element.addEventListener("click", getOperator);
-});
-
-function getOperator(){
-    operator = event.target.textContent;
-    if (operator) {
-        storingInFirstNumber = false;
-        operatorCount++;
+function operate(){
+    if (operator && secondNumber) {
+        storedFirstNumber = firstNumber;
+        storedOperator = operator;
+        storedSecondNumber = secondNumber;
+        firstNumber = calculate(operator, firstNumber, secondNumber);
+        secondNumber = '';
+        operator = '';
+        result = firstNumber;
         updateDisplay();
-
-        if(secondNumber.length !== 0 && operatorCount > 1) {
-            operate(operator, firstToDisplay, secondToDisplay);
-            checkForSecondOperator = true;
-            updateDisplay();
-        }
     }
 }
 
-function computeNumbers() {
-    if (storingInFirstNumber) {
-        firstNumber.push(clickedNumber);
-        updateDisplay(firstToDisplay = firstNumber.join("").toString());
-    } else {
-        secondNumber.push(clickedNumber);
-        updateDisplay(secondToDisplay = secondNumber.join("").toString());
-    }
-}
-
-function operate(operator, a, b){
-    a = parseFloat(a);
-    b = parseFloat(b);
-    
-
+function calculate(operator, a, b){
     if (operator === "/") {
         result = divide(a, b);
     } else if (operator === "*") {
@@ -67,18 +40,17 @@ function operate(operator, a, b){
     } else {
         result = add(a, b);
     }
-    
     return result;
 }
 
 function divide(a, b) {
     return a / b;
 }
-
+    
 function multiply(a, b) {
     return a * b;
 }
-
+    
 function subtract(a, b) {
     return a - b;
 }
@@ -87,25 +59,41 @@ function add(a, b) {
     return a + b;
 }
 
-function updateDisplay(){
-    currentValue.innerHTML = `${firstToDisplay || 0} ${operator || ''} ${secondToDisplay || ''}`;
-
-    if (checkForSecondOperator){
-        currentValue.innerHTML = `${result}`;
-    }
-    
-}
-
 function clear() {
-    firstNumber.splice(0,firstNumber.length);
-    secondNumber.splice(0,secondNumber.length);
-    storingInFirstNumber = true;
-    result = 0;
-    checkForSecondOperator = false;
-    operatorCount = 0;
-    operator = null;
-    currentValue.innerHTML = `0`;
+    firstNumber = '';
+    secondNumber = '';
+    operator = '';
+    result = '';
+    updateDisplay();
 }
 
-updateDisplay();
-clearBtn.addEventListener("click", clear);
+document.querySelectorAll('.number').forEach(function (button) {
+    button.addEventListener('click', function () {
+        if (operator) {
+            secondNumber += button.innerText;
+        } else {
+            firstNumber += button.innerText;
+        }
+        updateDisplay();
+    });
+});
+
+document.querySelectorAll('.operator').forEach(function (button) {
+    button.addEventListener('click', function () {
+        if (firstNumber && secondNumber) {
+            operate();
+        }
+        operator = button.innerText;
+        updateDisplay();
+    });
+});
+
+document.getElementById('equals').addEventListener('click', function () {
+    operate();
+});
+
+document.getElementById('clear').addEventListener('click', function () {
+    clear();
+});
+
+updateDisplay()

@@ -56,11 +56,6 @@ body {
     font-weight: 500;
 }
 
-.calculationValue {
-    font-size: 1.1rem;
-    margin-bottom: 0.2rem;
-}
-
 .delete-clear {
     display: flex;
     justify-content: space-evenly; 

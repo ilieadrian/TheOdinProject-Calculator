@@ -13,42 +13,45 @@
     <main>
         <div class="calculator">
             <div class="display">
-                <div id="calculationValue" class="displayValue"></div>
-                <div id="currentValue" class="displayValue"></div>
+                <div class="displayValue" id="upperValue"></div>
+                <div class="displayValue" id="bottomValue"></div>
             </div>
             <div class="numbers-container">
                 <div class="delete-clear">
-                    <button class="btn delete">Delete</button>
-                    <button class="btn clear">Clear all</button>
+                    <button class="btn delete" id="delete">Delete</button>
+                    <button class="btn clear" id="clear">Clear all</button>
                 </div>
                 <div class="number-row">
-                    <button class="btn" data-number>7</button>
-                    <button class="btn" data-number>8</button>
-                    <button class="btn" data-number>9</button>
-                    <button class="btn" data-operator>÷</button>
+                    <button class="number btn" id="7">7</button>
+                    <button class="number btn" id="8">8</button>
+                    <button class="number btn" id="9">9</button>
+                    <button class="operator btn" id="divide">/</button>
                 </div>
                 <div class="number-row">
-                    <button class="btn" data-number>4</button>
-                    <button class="btn" data-number>5</button>
-                    <button class="btn" data-number>6</button>
-                    <button class="btn" data-operator>x</button>
+                    <button class="number btn" id="4">4</button>
+                    <button class="number btn" id="5">5</button>
+                    <button class="number btn" id="6">6</button>
+                    <button class="operator btn" id="multiply">*</button>
                 </div>
                 <div class="number-row">
-                    <button class="btn" data-number>1</button>
-                    <button class="btn" data-number>2</button>
-                    <button class="btn" data-number>3</button>
-                    <button class="btn" data-operator>-</button>
+                    <button class="number btn" id="1">1</button>
+                    <button class="number btn" id="2">2</button>
+                    <button class="number btn" id="3">3</button>
+                    <button class="operator btn" id="subtract">-</button>
                 </div>
                 <div class="number-row">
-                    <button class="btn" data-number>.</button>
-                    <button class="btn" data-number>0</button>
-                    <button class="btn equalBtn" data-number>=</button>
-                    <button class="btn" data-operator>+</button>
+                    <button class="operator btn" id="decimal">.</button>
+                    <button class="number btn" id="0">0</button>
+                    <button class="operator btn" id="equals">=</button>
+                    <button class="operator btn" id="add">+</button>
                 </div>
             </div>
         </div>
     </main>
     <p class="attribution">Coded by<a href="http://ilieadrian.com">Ilie Adrian</a></p>
+    <script src="script.js"></script>
+</body>
+</html>
     <script src="script.js"></script>
 </body>
 </html>
