@@ -5,6 +5,7 @@ let result = '';
 let storedOperator;
 let storedSecondNumber;
 let storedFirstNumber;
+
 let upperDisplay = document.getElementById('upperValue');
 let bottomDisplay = document.getElementById('bottomValue')
 
@@ -13,9 +14,14 @@ function updateDisplay() {
         
     if(result){
         upperDisplay.innerHTML = `${storedFirstNumber} ${storedOperator} ${storedSecondNumber}`;
-        bottomDisplay.innerHTML = `${result}`; 
+        bottomDisplay.innerHTML = `${result}`;
+    }
+
+    if(result.length > 0 && operator.length < 0 && secondNumber.length < 0 ) {
+        console.log(bau);
     }
 }
+
 
 function operate(){
     if (operator && secondNumber) {
