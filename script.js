@@ -1,62 +1,66 @@
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
-let result = '';
-let storedOperator;
-let storedSecondNumber;
-let storedFirstNumber;
-
+let intermediateResult = ''; // New variable for intermediate result
+let isEnteringSecondNumber = false; // New variable to track number entry
 let upperDisplay = document.getElementById('upperValue');
 let bottomDisplay = document.getElementById('bottomValue')
 
 function updateDisplay() {
-    bottomDisplay.innerHTML = `${firstNumber || 0} ${operator || ''} ${secondNumber || ''}`;
-        
-    if(result){
-        upperDisplay.innerHTML = `${storedFirstNumber} ${storedOperator} ${storedSecondNumber}`;
-        bottomDisplay.innerHTML = `${result}`;
+    let displayText = '';
+
+    if (intermediateResult) {
+        displayText += intermediateResult;
+    } else {
+        displayText += firstNumber || '0';
     }
 
-    if(result.length > 0 && operator.length < 0 && secondNumber.length < 0 ) {
-        console.log(bau);
+    if (operator != "=" ) {
+        displayText += `${operator}`;
     }
+
+    if (isEnteringSecondNumber) {
+        displayText += `${secondNumber}`;
+    }
+
+    bottomDisplay.innerHTML = displayText;
 }
 
-
-function operate(){
+function operate() {
     if (operator && secondNumber) {
-        storedFirstNumber = firstNumber;
-        storedOperator = operator;
-        storedSecondNumber = secondNumber;
-        firstNumber = calculate(operator, firstNumber, secondNumber);
+        if (intermediateResult) {
+            firstNumber = intermediateResult;
+            intermediateResult = ''; // Clear intermediate result
+        }
+        intermediateResult = calculate(operator, firstNumber, secondNumber);
         secondNumber = '';
         operator = '';
-        result = firstNumber;
         updateDisplay();
     }
 }
 
-function calculate(operator, a, b){
+function calculate(operator, a, b) {
+    let num1 = +a;
+    let num2 = +b;
     if (operator === "/") {
-        result = divide(a, b);
+        return divide(num1, num2);
     } else if (operator === "*") {
-        result = multiply(a, b);
+        return multiply(num1, num2);
     } else if (operator === "-") {
-        result = subtract(a, b);
+        return subtract(num1, num2);
     } else {
-        result = add(a, b);
+        return add(num1, num2);
     }
-    return result;
 }
 
 function divide(a, b) {
     return a / b;
 }
-    
+
 function multiply(a, b) {
     return a * b;
 }
-    
+
 function subtract(a, b) {
     return a - b;
 }
@@ -69,13 +73,14 @@ function clear() {
     firstNumber = '';
     secondNumber = '';
     operator = '';
-    result = '';
+    intermediateResult = ''; // Clear intermediate result
+    isEnteringSecondNumber = false; // Reset to false
     updateDisplay();
 }
 
 document.querySelectorAll('.number').forEach(function (button) {
     button.addEventListener('click', function () {
-        if (operator) {
+        if (operator && isEnteringSecondNumber) {
             secondNumber += button.innerText;
         } else {
             firstNumber += button.innerText;
@@ -90,6 +95,7 @@ document.querySelectorAll('.operator').forEach(function (button) {
             operate();
         }
         operator = button.innerText;
+        isEnteringSecondNumber = true; // Set to true when entering the second number
         updateDisplay();
     });
 });
@@ -102,4 +108,4 @@ document.getElementById('clear').addEventListener('click', function () {
     clear();
 });
 
-updateDisplay()
+updateDisplay();
