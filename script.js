@@ -1,9 +1,9 @@
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
-let intermediateResult = ''; // New variable for intermediate result
-let isEnteringSecondNumber = false; // New variable to track number entry
-let upperDisplay = document.getElementById('upperValue');
+let intermediateResult = ''; 
+let isEnteringSecondNumber = false; 
+let display = document.getElementById('uiDisplay');
 let bottomDisplay = document.getElementById('bottomValue')
 
 function updateDisplay() {
@@ -23,14 +23,15 @@ function updateDisplay() {
         displayText += `${secondNumber}`;
     }
 
-    bottomDisplay.innerHTML = displayText;
+    display.innerHTML = displayText;
+    console.log("intermediateRes",intermediateResult)
 }
 
 function operate() {
     if (operator && secondNumber) {
         if (intermediateResult) {
             firstNumber = intermediateResult;
-            intermediateResult = ''; // Clear intermediate result
+            intermediateResult = '';
         }
         intermediateResult = calculate(operator, firstNumber, secondNumber);
         secondNumber = '';
@@ -73,8 +74,8 @@ function clear() {
     firstNumber = '';
     secondNumber = '';
     operator = '';
-    intermediateResult = ''; // Clear intermediate result
-    isEnteringSecondNumber = false; // Reset to false
+    intermediateResult = ''; 
+    isEnteringSecondNumber = false; 
     updateDisplay();
 }
 
@@ -95,7 +96,7 @@ document.querySelectorAll('.operator').forEach(function (button) {
             operate();
         }
         operator = button.innerText;
-        isEnteringSecondNumber = true; // Set to true when entering the second number
+        isEnteringSecondNumber = true;
         updateDisplay();
     });
 });
