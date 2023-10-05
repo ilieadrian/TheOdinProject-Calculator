@@ -10,7 +10,8 @@ function updateDisplay() {
     let displayText = '';
 
     if (intermediateResult) {
-        displayText += intermediateResult;
+        let roundedResult = parseFloat(intermediateResult).toFixed(2);
+        displayText += roundedResult;
     } else {
         displayText += firstNumber || '0';
     }
@@ -24,7 +25,6 @@ function updateDisplay() {
     }
 
     display.innerHTML = displayText;
-    console.log("intermediateRes",intermediateResult)
 }
 
 function operate() {
@@ -81,11 +81,13 @@ function clear() {
 
 document.querySelectorAll('.number').forEach(function (button) {
     button.addEventListener('click', function () {
+        let decimalSelected = false;
         if (operator && isEnteringSecondNumber) {
             secondNumber += button.innerText;
         } else {
             firstNumber += button.innerText;
         }
+
         updateDisplay();
     });
 });
