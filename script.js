@@ -1,17 +1,28 @@
+// To do 
+// The decimals are show regardles the number contains them or not (.00)
+// Pressing = before entering all of the numbers or an operator could cause problems!
+
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
 let intermediateResult = ''; 
 let isEnteringSecondNumber = false; 
+let errorMessage;
 let display = document.getElementById('uiDisplay');
 let bottomDisplay = document.getElementById('bottomValue')
 
-function updateDisplay() {
+function updateDisplay(error) {
     let displayText = '';
 
     if (intermediateResult) {
         let roundedResult = parseFloat(intermediateResult).toFixed(2);
-        displayText += roundedResult;
+        if(intermediateResult % 1 != 0) {
+            displayText += roundedResult;
+        } else {
+            displayText += intermediateResult;
+        }
+        
+        
     } else {
         displayText += firstNumber || '0';
     }
@@ -24,6 +35,12 @@ function updateDisplay() {
         displayText += `${secondNumber}`;
     }
 
+    if(error) {
+        displayText = `${error}`;
+        console.log(error)
+    }
+    
+
     display.innerHTML = displayText;
 }
 
@@ -33,6 +50,7 @@ function operate() {
             firstNumber = intermediateResult;
             intermediateResult = '';
         }
+
         intermediateResult = calculate(operator, firstNumber, secondNumber);
         secondNumber = '';
         operator = '';
@@ -94,8 +112,12 @@ document.querySelectorAll('.number').forEach(function (button) {
 
 document.querySelectorAll('.operator').forEach(function (button) {
     button.addEventListener('click', function () {
-        if (firstNumber && secondNumber) {
+        if (firstNumber && secondNumber && operator) {
             operate();
+        } else {
+            errorMessage = "Baga ba"
+
+            updateDisplay(errorMessage);
         }
         operator = button.innerText;
         isEnteringSecondNumber = true;
