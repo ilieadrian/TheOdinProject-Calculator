@@ -1,13 +1,8 @@
-// To do 
-// The decimals are show regardles the number contains them or not (.00)
-// Pressing = before entering all of the numbers or an operator could cause problems!
-
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
 let intermediateResult = ''; 
 let isEnteringSecondNumber = false; 
-let errorMessage;
 let display = document.getElementById('uiDisplay');
 let bottomDisplay = document.getElementById('bottomValue')
 
@@ -21,8 +16,7 @@ function updateDisplay(error) {
         } else {
             displayText += intermediateResult;
         }
-        
-        
+
     } else {
         displayText += firstNumber || '0';
     }
@@ -34,12 +28,6 @@ function updateDisplay(error) {
     if (isEnteringSecondNumber) {
         displayText += `${secondNumber}`;
     }
-
-    if(error) {
-        displayText = `${error}`;
-        console.log(error)
-    }
-    
 
     display.innerHTML = displayText;
 }
@@ -114,10 +102,10 @@ document.querySelectorAll('.operator').forEach(function (button) {
     button.addEventListener('click', function () {
         if (firstNumber && secondNumber && operator) {
             operate();
-        } else {
-            errorMessage = "Baga ba"
+        } 
 
-            updateDisplay(errorMessage);
+        if(operator == "=" && firstNumber == '' && secondNumber == '') {
+            return;
         }
         operator = button.innerText;
         isEnteringSecondNumber = true;
