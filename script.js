@@ -3,34 +3,68 @@ let secondNumber = '';
 let operator = '';
 let intermediateResult = ''; 
 let isEnteringSecondNumber = false; 
+let errorMessage;
 let display = document.getElementById('uiDisplay');
-let bottomDisplay = document.getElementById('bottomValue')
 
 function updateDisplay(error) {
     let displayText = '';
 
-    if (intermediateResult) {
-        let roundedResult = parseFloat(intermediateResult).toFixed(2);
-        if(intermediateResult % 1 != 0) {
-            displayText += roundedResult;
-        } else {
-            displayText += intermediateResult;
-        }
+    switch (true) {
+        case error !== undefined:
+            displayText = error;
+            break;
 
-    } else {
-        displayText += firstNumber || '0';
-    }
+        case intermediateResult !== '':
+            let roundedResult = parseFloat(intermediateResult).toFixed(2);
+            displayText += intermediateResult % 1 !== 0 ? roundedResult : intermediateResult;
+            // No break here, to allow for operator and secondNumber checks.
 
-    if (operator != "=" ) {
-        displayText += `${operator}`;
-    }
+        case operator !== '=':
+            displayText += operator;
+            // No break here, to allow for isEnteringSecondNumber check.
 
-    if (isEnteringSecondNumber) {
-        displayText += `${secondNumber}`;
+        case isEnteringSecondNumber:
+            displayText += secondNumber;
+            break;
+
+        default:
+            displayText += firstNumber || '0';
     }
 
     display.innerHTML = displayText;
 }
+
+
+// function updateDisplay(error) {
+//     let displayText = '';
+
+//         if (intermediateResult) {
+//             let roundedResult = parseFloat(intermediateResult).toFixed(2);
+//             if(intermediateResult % 1 != 0) {
+//                 displayText += roundedResult; console.log(displayText, "intermediateResult 1");
+//             } else {
+//                 displayText += intermediateResult;
+//                 console.log(displayText, "intermediateResult 2");
+//             }
+//         } else if (operator != "=" ) {
+//             displayText += `${operator}`;
+//             console.log(displayText, "!=");
+//         } else if (isEnteringSecondNumber) {
+//             displayText += `${secondNumber}`;
+//             console.log(displayText, "isEnteringSecondNumber");
+//         } else if(error) {
+//             displayText = `${error}`;
+//             console.log(displayText);
+//             // display.innerHTML = `${displayText}`; // Display the error and return immediately
+//             // return;
+//         } else {
+//             displayText += firstNumber || '0';
+//             console.log(displayText, "else 2");
+//         }
+
+//     display.innerHTML = displayText;
+// }
+
 
 function operate() {
     if (operator && secondNumber) {
@@ -61,6 +95,13 @@ function calculate(operator, a, b) {
 }
 
 function divide(a, b) {
+    if (b === 0) {
+        console.log(b)
+        errorMessage = "Nu se poate diviza la 0";
+        updateDisplay(errorMessage);
+        return null;
+    }
+    console.log(a, b)
     return a / b;
 }
 
@@ -107,11 +148,14 @@ document.querySelectorAll('.operator').forEach(function (button) {
         if(operator == "=" && firstNumber == '' && secondNumber == '') {
             return;
         }
+
         operator = button.innerText;
         isEnteringSecondNumber = true;
         updateDisplay();
     });
 });
+
+
 
 document.getElementById('equals').addEventListener('click', function () {
     operate();
@@ -122,3 +166,37 @@ document.getElementById('clear').addEventListener('click', function () {
 });
 
 updateDisplay();
+
+
+    
+    
+    
+    
+    
+    // function updateDisplay(error) {
+    //     let displayText = '';
+    
+    //     switch (true) {
+    //         case error !== undefined:
+    //             displayText = error;
+    //             break;
+    
+    //         case intermediateResult !== '':
+    //             let roundedResult = parseFloat(intermediateResult).toFixed(2);
+    //             displayText += intermediateResult % 1 !== 0 ? roundedResult : intermediateResult;
+    //             // No break here, to allow for operator and secondNumber checks.
+    
+    //         case operator !== '=':
+    //             displayText += operator;
+    //             // No break here, to allow for isEnteringSecondNumber check.
+    
+    //         case isEnteringSecondNumber:
+    //             displayText += secondNumber;
+    //             break;
+    
+    //         default:
+    //             displayText += firstNumber || '0';
+    //     }
+    
+    //     display.innerHTML = displayText;
+    // }
