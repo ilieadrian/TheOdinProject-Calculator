@@ -1,3 +1,10 @@
+// To do
+// 1. Add a “backspace” button, so the user can undo if they click the wrong number.
+// 2. Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble. Read the MDN documentation for event.preventDefault to help solve this problem.
+// 3. Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
+
+
+
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
@@ -9,61 +16,38 @@ let display = document.getElementById('uiDisplay');
 function updateDisplay(error) {
     let displayText = '';
 
-    switch (true) {
-        case error !== undefined:
-            displayText = error;
-            break;
-
-        case intermediateResult !== '':
-            let roundedResult = parseFloat(intermediateResult).toFixed(2);
-            displayText += intermediateResult % 1 !== 0 ? roundedResult : intermediateResult;
-            // No break here, to allow for operator and secondNumber checks.
-
-        case operator !== '=':
-            displayText += operator;
-            // No break here, to allow for isEnteringSecondNumber check.
-
-        case isEnteringSecondNumber:
-            displayText += secondNumber;
-            break;
-
-        default:
-            displayText += firstNumber || '0';
+    if (intermediateResult) {
+        let roundedResult = parseFloat(intermediateResult).toFixed(2);
+        if(intermediateResult % 1 != 0) {
+            displayText += roundedResult; console.log(displayText, "intermediateResult 1");
+        } else {
+            displayText += intermediateResult;
+            console.log(displayText, "intermediateResult 2");
+        }
+    } else {
+        displayText += firstNumber || '0';
+        console.log(displayText, "else 2");
     }
 
+    if (operator != "=" ) {
+        displayText += `${operator}`;
+        // console.log(displayText, "!=");
+    }
+
+    if (isEnteringSecondNumber) {
+        displayText += `${secondNumber}`;
+        // console.log(displayText, "isEnteringSecondNumber");
+    }
+
+    if(error) {
+        displayText = `${error}`;
+        // console.log(displayText);
+        // display.innerHTML = `${displayText}`; // Display the error and return immediately
+        // return;
+    }
+    console.log(displayText, "outsite of if")
     display.innerHTML = displayText;
 }
-
-
-// function updateDisplay(error) {
-//     let displayText = '';
-
-//         if (intermediateResult) {
-//             let roundedResult = parseFloat(intermediateResult).toFixed(2);
-//             if(intermediateResult % 1 != 0) {
-//                 displayText += roundedResult; console.log(displayText, "intermediateResult 1");
-//             } else {
-//                 displayText += intermediateResult;
-//                 console.log(displayText, "intermediateResult 2");
-//             }
-//         } else if (operator != "=" ) {
-//             displayText += `${operator}`;
-//             console.log(displayText, "!=");
-//         } else if (isEnteringSecondNumber) {
-//             displayText += `${secondNumber}`;
-//             console.log(displayText, "isEnteringSecondNumber");
-//         } else if(error) {
-//             displayText = `${error}`;
-//             console.log(displayText);
-//             // display.innerHTML = `${displayText}`; // Display the error and return immediately
-//             // return;
-//         } else {
-//             displayText += firstNumber || '0';
-//             console.log(displayText, "else 2");
-//         }
-
-//     display.innerHTML = displayText;
-// }
 
 
 function operate() {
@@ -128,10 +112,16 @@ function clear() {
 
 document.querySelectorAll('.number').forEach(function (button) {
     button.addEventListener('click', function () {
-        let decimalSelected = false;
         if (operator && isEnteringSecondNumber) {
+            if(button.innerText === '.' && secondNumber.includes('.')){
+                return;
+            }
             secondNumber += button.innerText;
+            decimalSelected = false;
         } else {
+            if (button.innerText === '.' && firstNumber.includes('.')) {
+                return;
+            }
             firstNumber += button.innerText;
         }
 
@@ -166,37 +156,3 @@ document.getElementById('clear').addEventListener('click', function () {
 });
 
 updateDisplay();
-
-
-    
-    
-    
-    
-    
-    // function updateDisplay(error) {
-    //     let displayText = '';
-    
-    //     switch (true) {
-    //         case error !== undefined:
-    //             displayText = error;
-    //             break;
-    
-    //         case intermediateResult !== '':
-    //             let roundedResult = parseFloat(intermediateResult).toFixed(2);
-    //             displayText += intermediateResult % 1 !== 0 ? roundedResult : intermediateResult;
-    //             // No break here, to allow for operator and secondNumber checks.
-    
-    //         case operator !== '=':
-    //             displayText += operator;
-    //             // No break here, to allow for isEnteringSecondNumber check.
-    
-    //         case isEnteringSecondNumber:
-    //             displayText += secondNumber;
-    //             break;
-    
-    //         default:
-    //             displayText += firstNumber || '0';
-    //     }
-    
-    //     display.innerHTML = displayText;
-    // }
