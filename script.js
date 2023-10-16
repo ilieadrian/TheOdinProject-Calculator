@@ -1,9 +1,6 @@
 // To do
-// 1. Add a “backspace” button, so the user can undo if they click the wrong number.
-// 2. Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble. Read the MDN documentation for event.preventDefault to help solve this problem.
-// 3. Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
-
-
+// 1. Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble. Read the MDN documentation for event.preventDefault to help solve this problem.
+// 2. Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
 
 let firstNumber = '';
 let secondNumber = '';
@@ -22,11 +19,11 @@ function updateDisplay(error) {
             displayText += roundedResult; console.log(displayText, "intermediateResult 1");
         } else {
             displayText += intermediateResult;
-            console.log(displayText, "intermediateResult 2");
+            // console.log(displayText, "intermediateResult 2");
         }
     } else {
         displayText += firstNumber || '0';
-        console.log(displayText, "else 2");
+        // console.log(displayText, "else 2");
     }
 
     if (operator != "=" ) {
@@ -45,10 +42,9 @@ function updateDisplay(error) {
         // display.innerHTML = `${displayText}`; // Display the error and return immediately
         // return;
     }
-    console.log(displayText, "outsite of if")
+    // console.log(displayText, "outsite of if")
     display.innerHTML = displayText;
 }
-
 
 function operate() {
     if (operator && secondNumber) {
@@ -101,6 +97,15 @@ function add(a, b) {
     return a + b;
 }
 
+function deleteFromNumber() {
+    if (operator && isEnteringSecondNumber) {
+        secondNumber = secondNumber.slice(0,-1);
+    } else {
+        firstNumber = firstNumber.slice(0,-1);
+    };
+    updateDisplay();
+}
+
 function clear() {
     firstNumber = '';
     secondNumber = '';
@@ -117,7 +122,6 @@ document.querySelectorAll('.number').forEach(function (button) {
                 return;
             }
             secondNumber += button.innerText;
-            decimalSelected = false;
         } else {
             if (button.innerText === '.' && firstNumber.includes('.')) {
                 return;
@@ -138,7 +142,6 @@ document.querySelectorAll('.operator').forEach(function (button) {
         if(operator == "=" && firstNumber == '' && secondNumber == '') {
             return;
         }
-
         operator = button.innerText;
         isEnteringSecondNumber = true;
         updateDisplay();
@@ -151,8 +154,14 @@ document.getElementById('equals').addEventListener('click', function () {
     operate();
 });
 
+document.getElementById('delete').addEventListener('click', function () {
+    deleteFromNumber();
+});
+
 document.getElementById('clear').addEventListener('click', function () {
     clear();
 });
+
+
 
 updateDisplay();
