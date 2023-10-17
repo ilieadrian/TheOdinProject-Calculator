@@ -115,6 +115,25 @@ function clear() {
     updateDisplay();
 }
 
+function handleKeyboardInput(event) {
+    let pressedkey = event.key; 
+
+    switch (pressedkey){
+        case "Backspace":
+            deleteFromNumber();
+            break;
+        case "Escape":
+            clear()
+            break;
+        case "+":
+            // 
+            break;
+            default:
+            console.log(pressedkey) ;   
+    }   
+
+}
+
 document.querySelectorAll('.number').forEach(function (button) {
     button.addEventListener('click', function () {
         if (operator && isEnteringSecondNumber) {
@@ -133,6 +152,8 @@ document.querySelectorAll('.number').forEach(function (button) {
     });
 });
 
+
+
 document.querySelectorAll('.operator').forEach(function (button) {
     button.addEventListener('click', function () {
         if (firstNumber && secondNumber && operator) {
@@ -148,8 +169,6 @@ document.querySelectorAll('.operator').forEach(function (button) {
     });
 });
 
-
-
 document.getElementById('equals').addEventListener('click', function () {
     operate();
 });
@@ -162,6 +181,8 @@ document.getElementById('clear').addEventListener('click', function () {
     clear();
 });
 
-
+window.addEventListener('keydown', function (event) {
+    handleKeyboardInput(event);
+});
 
 updateDisplay();
