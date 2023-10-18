@@ -1,6 +1,5 @@
 // To do
-// 1. Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble. Read the MDN documentation for event.preventDefault to help solve this problem.
-// 2. Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
+// Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
 
 let firstNumber = '';
 let secondNumber = '';
@@ -97,6 +96,68 @@ function add(a, b) {
     return a + b;
 }
 
+function handleNumberInput(number) {
+    if (operator && isEnteringSecondNumber) {
+        if (number === '.' && secondNumber.includes('.')) {
+            return;
+        }
+        secondNumber += number;
+    } else {
+        if (number === '.' && firstNumber.includes('.')) {
+            return;
+        }
+        firstNumber += number;
+    }
+
+    updateDisplay();
+}
+
+function handleOperatorInput(selectedOperator) {
+    if (firstNumber && secondNumber && operator) {
+        operate();
+    }
+
+    if (operator === "=" && firstNumber === '' && secondNumber === '') {
+        return;
+    }
+    operator = selectedOperator;
+    isEnteringSecondNumber = true;
+    updateDisplay();
+}
+
+function handleKeyboardInput(event) {
+    let pressedKey = event.key; 
+
+    switch (pressedKey) {
+        case "+":
+            handleOperatorInput("+");
+            break;
+        case "-":
+            handleOperatorInput("-");
+            break;
+        case "*":
+            handleOperatorInput("*");
+            break;            
+        case "/":
+            handleOperatorInput("/");
+            break;
+        case "=":
+        case "Enter":
+            operate();
+            break;
+        case "Backspace":
+            deleteFromNumber();
+            break;
+        case "Escape":
+            clear();
+            break;           
+        default:
+            if (/[0-9\.]/.test(pressedKey)) {
+                handleNumberInput(pressedKey);
+            }
+    }   
+}
+
 function deleteFromNumber() {
     if (operator && isEnteringSecondNumber) {
         secondNumber = secondNumber.slice(0,-1);
@@ -115,57 +176,15 @@ function clear() {
     updateDisplay();
 }
 
-function handleKeyboardInput(event) {
-    let pressedkey = event.key; 
-
-    switch (pressedkey){
-        case "Backspace":
-            deleteFromNumber();
-            break;
-        case "Escape":
-            clear()
-            break;
-        case "+":
-            // 
-            break;
-            default:
-            console.log(pressedkey) ;   
-    }   
-
-}
-
 document.querySelectorAll('.number').forEach(function (button) {
     button.addEventListener('click', function () {
-        if (operator && isEnteringSecondNumber) {
-            if(button.innerText === '.' && secondNumber.includes('.')){
-                return;
-            }
-            secondNumber += button.innerText;
-        } else {
-            if (button.innerText === '.' && firstNumber.includes('.')) {
-                return;
-            }
-            firstNumber += button.innerText;
-        }
-
-        updateDisplay();
+        handleNumberInput(button.innerText);
     });
 });
 
-
-
 document.querySelectorAll('.operator').forEach(function (button) {
     button.addEventListener('click', function () {
-        if (firstNumber && secondNumber && operator) {
-            operate();
-        } 
-
-        if(operator == "=" && firstNumber == '' && secondNumber == '') {
-            return;
-        }
-        operator = button.innerText;
-        isEnteringSecondNumber = true;
-        updateDisplay();
+        handleOperatorInput(button.innerText);
     });
 });
 
