@@ -1,5 +1,6 @@
 // To do
 // Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
+// Prevent large numbers to overflow display
 
 let firstNumber = '';
 let secondNumber = '';
@@ -12,10 +13,17 @@ let display = document.getElementById('uiDisplay');
 function updateDisplay(error) {
     let displayText = '';
 
+    if(error) {
+        displayText = `${error}`;
+        display.innerHTML = `${displayText}`; // Display the error and return immediately
+        return;
+    }
+
     if (intermediateResult) {
         let roundedResult = parseFloat(intermediateResult).toFixed(2);
         if(intermediateResult % 1 != 0) {
-            displayText += roundedResult; console.log(displayText, "intermediateResult 1");
+            displayText += roundedResult; 
+            // console.log(displayText, "intermediateResult 1");
         } else {
             displayText += intermediateResult;
             // console.log(displayText, "intermediateResult 2");
@@ -35,12 +43,7 @@ function updateDisplay(error) {
         // console.log(displayText, "isEnteringSecondNumber");
     }
 
-    if(error) {
-        displayText = `${error}`;
-        // console.log(displayText);
-        // display.innerHTML = `${displayText}`; // Display the error and return immediately
-        // return;
-    }
+    
     // console.log(displayText, "outsite of if")
     display.innerHTML = displayText;
 }
@@ -126,37 +129,25 @@ function handleOperatorInput(selectedOperator) {
 }
 
 function handleKeyboardInput(event) {
-    let pressedKey = event.key; 
+    let pressedKey = event.key;
 
-    switch (pressedKey) {
-        case "+":
-            handleOperatorInput("+");
-            break;
-        case "-":
-            handleOperatorInput("-");
-            break;
-        case "*":
-            handleOperatorInput("*");
-            break;            
-        case "/":
-            handleOperatorInput("/");
-            break;
-        case "=":
-        case "Enter":
-            operate();
-            break;
-        case "Backspace":
-            deleteFromNumber();
-            break;
-        case "Escape":
-            clear();
-            break;           
-        default:
-            if (/[0-9\.]/.test(pressedKey)) {
-                handleNumberInput(pressedKey);
-            }
-    }   
-}
+    if (pressedKey === "/") {
+        event.preventDefault();
+    }
+
+    if (/[+\-*/]/.test(pressedKey)) {
+        handleOperatorInput(pressedKey);
+    } else if (pressedKey === "=" || pressedKey === "Enter") {
+        operate();
+    } else if (pressedKey === "Backspace") {
+        deleteFromNumber();
+    } else if (pressedKey === "Escape") {
+        clear();
+    } else if (/^[0-9.]$/.test(pressedKey)) {
+        handleNumberInput(pressedKey);
+    } else {
+        return;
+    }}
 
 function deleteFromNumber() {
     if (operator && isEnteringSecondNumber) {
