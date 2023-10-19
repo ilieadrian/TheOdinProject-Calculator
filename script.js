@@ -7,44 +7,37 @@ let secondNumber = '';
 let operator = '';
 let intermediateResult = ''; 
 let isEnteringSecondNumber = false; 
-let errorMessage;
+let errorMessage = null;
 let display = document.getElementById('uiDisplay');
 
-function updateDisplay(error) {
+function updateDisplay() {
     let displayText = '';
 
-    if(error) {
-        displayText = `${error}`;
-        display.innerHTML = `${displayText}`; // Display the error and return immediately
-        return;
-    }
-
-    if (intermediateResult) {
+    if (errorMessage) {
+        isEnteringSecondNumber = false;
+        displayText = errorMessage;
+        if (operator) {
+            return;
+        }
+    } else if (intermediateResult) {
         let roundedResult = parseFloat(intermediateResult).toFixed(2);
-        if(intermediateResult % 1 != 0) {
-            displayText += roundedResult; 
-            // console.log(displayText, "intermediateResult 1");
+        if (intermediateResult % 1 !== 0) {
+            displayText += roundedResult;
         } else {
             displayText += intermediateResult;
-            // console.log(displayText, "intermediateResult 2");
         }
     } else {
         displayText += firstNumber || '0';
-        // console.log(displayText, "else 2");
     }
 
-    if (operator != "=" ) {
+    if (operator !== "=") {
         displayText += `${operator}`;
-        // console.log(displayText, "!=");
     }
 
     if (isEnteringSecondNumber) {
         displayText += `${secondNumber}`;
-        // console.log(displayText, "isEnteringSecondNumber");
     }
 
-    
-    // console.log(displayText, "outsite of if")
     display.innerHTML = displayText;
 }
 
@@ -78,13 +71,12 @@ function calculate(operator, a, b) {
 
 function divide(a, b) {
     if (b === 0) {
-        console.log(b)
-        errorMessage = "Nu se poate diviza la 0";
-        updateDisplay(errorMessage);
+        errorMessage = "Cannot divide by 0"; 
         return null;
+    } else {
+        errorMessage = null; 
+        return a / b;
     }
-    console.log(a, b)
-    return a / b;
 }
 
 function multiply(a, b) {
@@ -105,13 +97,13 @@ function handleNumberInput(number) {
             return;
         }
         secondNumber += number;
+        
     } else {
         if (number === '.' && firstNumber.includes('.')) {
             return;
         }
         firstNumber += number;
     }
-
     updateDisplay();
 }
 
@@ -155,6 +147,7 @@ function deleteFromNumber() {
     } else {
         firstNumber = firstNumber.slice(0,-1);
     };
+    errorMessage = null; 
     updateDisplay();
 }
 
@@ -164,6 +157,7 @@ function clear() {
     operator = '';
     intermediateResult = ''; 
     isEnteringSecondNumber = false; 
+    errorMessage = null; 
     updateDisplay();
 }
 
