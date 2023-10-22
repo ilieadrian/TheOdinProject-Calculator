@@ -42,14 +42,20 @@ body {
     background-color: #F9FBFC;
     padding: 0.5rem;
     height: 8rem;
+    max-width: 100%;
     margin-bottom: 1rem;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow-wrap: break-word;
     text-align: right;
     font-size: 2.5rem;
     font-weight: 500;
+}
+
+.big-number {
+    font-size: 2rem;
 }
 
 .delete-clear {

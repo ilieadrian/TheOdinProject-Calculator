@@ -1,5 +1,4 @@
 // To do
-// Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
 // Prevent large numbers to overflow display
 
 let firstNumber = '';
@@ -36,6 +35,12 @@ function updateDisplay() {
 
     if (isEnteringSecondNumber) {
         displayText += `${secondNumber}`;
+    }
+
+    if (displayText.length >= 18){
+        display.classList.add("big-number");
+    } else {
+        display.classList.remove("big-number");
     }
 
     display.innerHTML = displayText;
@@ -93,16 +98,17 @@ function add(a, b) {
 
 function handleNumberInput(number) {
     if (operator && isEnteringSecondNumber) {
-        if (number === '.' && secondNumber.includes('.')) {
+        if (number === '.' && secondNumber.includes('.') || secondNumber.length >= 16) {
             return;
+        } else {
+            secondNumber += number;
         }
-        secondNumber += number;
-        
     } else {
-        if (number === '.' && firstNumber.includes('.')) {
+        if (number === '.' && firstNumber.includes('.') || firstNumber.length >= 16) {
             return;
+        } else {
+            firstNumber += number;
         }
-        firstNumber += number;
     }
     updateDisplay();
 }
